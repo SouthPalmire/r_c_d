@@ -1,94 +1,94 @@
 <template>
-   <div class="register-body">
-      <div class="register">
-         <h1>registration</h1>
+  <div class="register-body">
+    <div class="register">
+      <h1>registration</h1>
 
-         <form @submit.prevent="fetchUserData">
-            <label for="firstname">Firstname<br>
-               <input
-                  id="firstname"
-                  v-model="firstname"
-                  @blur="v$.firstname.$touch()"
-                  type="text"
-                  name="firstname"
-               />
-            </label><br><br>
-            <p v-show="v$.firstname.$invalid && v$.firstname.$dirty && !this.errors">
-               please enter your firstname
-            </p>
+      <form @submit.prevent="fetchUserData">
+        <label for="firstname">Firstname<br>
+          <input
+            id="firstname"
+            v-model="firstname"
+            @blur="v$.firstname.$touch()"
+            type="text"
+            name="firstname"
+          />
+        </label><br><br>
+        <p v-show="v$.firstname.$invalid && v$.firstname.$dirty && !this.errors">
+          please enter your firstname
+        </p>
 
-            <label for="lastname">Lastname<br>
-               <input
-                  id="lastname"
-                  v-model="lastname"
-                  @blur="v$.lastname.$touch()"
-                  type="text"
-                  name="lastname"
-               />
-            </label><br><br>
-            <p v-show="v$.lastname.$invalid && v$.lastname.$dirty && !this.errors">
-               please enter your lastname
-            </p>
+        <label for="lastname">Lastname<br>
+          <input
+            id="lastname"
+            v-model="lastname"
+            @blur="v$.lastname.$touch()"
+            type="text"
+            name="lastname"
+          />
+        </label><br><br>
+        <p v-show="v$.lastname.$invalid && v$.lastname.$dirty && !this.errors">
+          please enter your lastname
+        </p>
 
-            <label for="password">password<br>
-               <input
-                  id="password"
-                  v-model="passwordCreate"
-                  @blur="v$.passwordCreate.$touch()"
-                  type="password"
-               />
-            </label><br><br>
-            <p v-show="v$.passwordCreate.$invalid && v$.passwordCreate.$dirty && !this.errors">
-               please enter your password
-            </p>
+        <label for="password">password<br>
+          <input
+            id="password"
+            v-model="passwordCreate"
+            @blur="v$.passwordCreate.$touch()"
+            type="password"
+          />
+        </label><br><br>
+        <p v-show="v$.passwordCreate.$invalid && v$.passwordCreate.$dirty && !this.errors">
+            please enter your password
+        </p>
 
-            <label for="confirm_password">confirm password<br>
-               <input
-                  id="confirm_password"
-                  v-model="confirmPasswordCreate"
-                  @blur="v$.confirmPasswordCreate.$touch()"
-                  type="password"
-               />
-            </label><br><br>
-            <p v-show="v$.confirmPasswordCreate.$invalid
-               && v$.confirmPasswordCreate.$dirty && !this.errors"
-            >
-               please confirm your password
-            </p>
+        <label for="confirm_password">confirm password<br>
+            <input
+              id="confirm_password"
+              v-model="confirmPasswordCreate"
+              @blur="v$.confirmPasswordCreate.$touch()"
+              type="password"
+            />
+        </label><br><br>
+        <p v-show="v$.confirmPasswordCreate.$invalid
+          && v$.confirmPasswordCreate.$dirty && !this.errors"
+        >
+          please confirm your password
+        </p>
 
-            <label for="e_mail">e-mail<br>
-               <input
-                  id="e_mail"
-                  v-model="email"
-                  @blur="v$.email.$touch()"
-                  name="email"
-                  type="email"
-               />
-            </label><br><br>
-            <p v-show="v$.email.$invalid && v$.email.$dirty && !this.errors">
-               please enter your email
-            </p>
+        <label for="e_mail">e-mail<br>
+          <input
+            id="e_mail"
+            v-model="email"
+            @blur="v$.email.$touch()"
+            name="email"
+            type="email"
+          />
+        </label><br><br>
+        <p v-show="v$.email.$invalid && v$.email.$dirty && !this.errors">
+          please enter your email
+        </p>
 
-            <label for="birth_date">date of birth<br>
-               <input
-                  id="birth_date"
-                  v-model="date_of_birth"
-                  @blur="v$.date_of_birth.$touch()"
-                  type="date"
-               />
-            </label><br><br>
-            <p v-show="v$.date_of_birth.$invalid && v$.date_of_birth.$dirty && !this.errors">
-               please enter date of birth
-            </p>
+        <label for="birth_date">date of birth<br>
+          <input
+            id="birth_date"
+            v-model="date_of_birth"
+            @blur="v$.date_of_birth.$touch()"
+            type="date"
+          />
+        </label><br><br>
+        <p v-show="v$.date_of_birth.$invalid && v$.date_of_birth.$dirty && !this.errors">
+          please enter date of birth
+        </p>
 
-            <button type="submit" :disabled="btnDisable">
-               register
-            </button>
-         </form>
+        <button type="submit" :disabled="btnDisable">
+          register
+        </button>
+      </form>
 
-         <p v-show="errors">{{ errors }}</p>
-      </div>
-   </div>
+      <p v-show="errors">{{ errors }}</p>
+    </div>
+  </div>
 </template>
 
 <script>
