@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS user (
 
 CREATE TABLE IF NOT EXISTS token (
   user_id varchar(255) NOT NULL,
-  refresh_token varchar(255) NOT NULL,
+  refresh_token varchar(255) NOT NULL
 );
