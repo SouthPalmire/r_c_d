@@ -1,21 +1,22 @@
-require('dotenv').config();   // eslint-disable-line
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import router from './router/userRouter.js';
 
-const PORT = process.env.PORT || 5000;
+const { PORT } = process.env;
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use('/auth', router);
 
-const start = async () => {
+(() => {
   try {
-    app.listen(5000, () => console.log(`[server]: Server is running at http://localhost:${PORT}`));
-  } catch (error) {
-    console.log(error);
+    app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`));
+  } catch (e) {
+    console.log(e);
   }
-};
-
-start();
+})();

@@ -1,10 +1,10 @@
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS users (
   id INT unsigned NOT NULL AUTO_INCREMENT,
   email VARCHAR(40) NOT NULL,
   password VARCHAR(40) NOT NULL,
   activation_status VARCHAR(10) NOT NULL,
   activation_link VARCHAR(40) NOT NULL,
-  registration_date INT(11) unsigned NOT NULL,
+  registration_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 
