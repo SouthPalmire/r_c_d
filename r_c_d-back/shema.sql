@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
-  id INT unsigned NOT NULL AUTO_INCREMENT,
-  email VARCHAR(40) NOT NULL,
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  email VARCHAR(40) NOT NULL UNIQUE,
   password VARCHAR(40) NOT NULL,
   activation_status VARCHAR(10) NOT NULL,
   activation_link VARCHAR(40) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS token (
-  user_id varchar(255) NOT NULL,
-  refresh_token varchar(255) NOT NULL
+CREATE TABLE IF NOT EXISTS tokens (
+  user_id VARCHAR(255) NOT NULL UNIQUE,
+  refresh_token VARCHAR(255) NOT NULL
 );
