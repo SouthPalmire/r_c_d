@@ -14,15 +14,15 @@ class UserService {
         }
 
         const activationLink = uuidv4();
-        const passwordHash = await bcrypt.hash(user.password, 2);
+        const passwordHash = await bcrypt.hashSync(user.password, 2);
 
         const queryString = `INSERT INTO users (email, password, activation_status, activation_link)
-                             VALUES ('${user.email}', '${passwordHash}', '${user.activationStatus}','${activationLink}')`;
+                             VALUES ('${user.email}', '${passwordHash}', 'false','${activationLink}')`;
         const userBdRows = await mysql(queryString);
         const userDto = new UserDto(user, { ...userBdRows });
         const tokens = tokenService.generateTokens({ ...userDto });
 
-        await mailService.sendMailToActivation(user.email, activationLink);
+        await mailService.sendActivationMail(user.email, `${process.env.API_URL}/auth/activate/${activationLink}`);
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
         return {
           tokens,
@@ -31,17 +31,27 @@ class UserService {
       });
   }
 
-  login(user) {
-    const queryString = `SELECT *
-                         FROM users
-                         WHERE email = '${user.email}';`;
-    return mysql(queryString);
+  activate(activationLink) {
+    return mysql(`SELECT * FROM users WHERE activation_link='${activationLink}';`)
+      .then((data) => {
+        if (!data) {
+          return console.log('некорректная ссылка активации');
+        }
+        return mysql(`UPDATE users SET activation_status = 'true' WHERE activation_link = '${activationLink}'`);
+      });
   }
 
-  logout(user) {
-    const queryString = `SELECT * FROM users WHERE email='${user.email}';`;
-    return mysql(queryString);
-  }
+//   login(user) {
+//     const queryString = `SELECT *
+//                          FROM users
+//                          WHERE email = '${user.email}';`;
+//     return mysql(queryString);
+//   }
+//
+//   logout(user) {
+//     const queryString = `SELECT * FROM users WHERE email='${user.email}';`;
+//     return mysql(queryString);
+//   }
 }
 
 export default new UserService();

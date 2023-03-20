@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../views/Login.vue';
+import UserLoginRegistration from '../views/UserLoginRegistration.vue';
 
-const Register = () => import('../views/Register.vue');
+// const Register = () => import('../views/UserRegistration.vue');
 
 const routes = [
   {
-    name: 'login',
+    name: 'UserLogin',
     path: '/login',
-    component: Login,
-    alias: '/',
+    component: UserLoginRegistration,
+    // alias: '/',
   },
-  {
-    name: 'register',
-    path: '/register',
-    component: Register,
-  },
+  // {
+  //   name: 'UserRegister',
+  //   path: '/register',
+  //   component: Register,
+  // },
 ];
 
 const router = createRouter({

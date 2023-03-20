@@ -13,6 +13,7 @@
     "rules": {
         "import/extensions": 1,
         "class-methods-use-this": 1,
-        "no-return-await": 1
+        "no-return-await": 1,
+        "lines-between-class-members": 1
     }
 }

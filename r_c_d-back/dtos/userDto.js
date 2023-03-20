@@ -1,8 +1,6 @@
 export default class UserDto {
   email;
-
   id;
-
   isActivated;
 
   constructor(model, rows) {
