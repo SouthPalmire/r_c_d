@@ -11,23 +11,47 @@
 
     <div class="popup_form login">
       <h2>Login</h2>
-      <form action="#">
+      <form @submit.prevent="loginSubmitting">
         <div class="input_box">
           <span class="icon">
             <ion-icon name="mail"></ion-icon>
           </span>
-          <input type="email" required>
+          <input
+            type="text"
+            v-model.trim="loginForm.email"
+            @blur="v$.loginForm.email.$touch()"
+            required
+          >
 <!--eslint-disable-next-line-->
-          <label>Email</label>
+          <label
+            :style="{ color: 'red' }"
+            v-if="v$.loginForm.email.$dirty && v$.loginForm.email.$invalid"
+          >
+            enter your email
+          </label>
+<!--eslint-disable-next-line-->
+          <label v-else>Email</label>
         </div>
 
         <div class="input_box">
           <span class="icon">
             <ion-icon name="lock-closed"></ion-icon>
           </span>
-          <input type="password" required>
-          <!--eslint-disable-next-line-->
-          <label>Password</label>
+          <input
+            type="password"
+            v-model.trim="loginForm.password"
+            @blur="v$.loginForm.password.$touch()"
+            required
+          >
+<!--eslint-disable-next-line-->
+          <label
+            :style="{ color: 'red' }"
+            v-if="v$.loginForm.password.$dirty && v$.loginForm.password.$invalid"
+          >
+            enter your password
+          </label>
+<!--eslint-disable-next-line-->
+          <label v-else>Password</label>
         </div>
 
         <div class="remember_forgot">
@@ -36,7 +60,11 @@
           <a href="#">Forgot password?</a>
         </div>
 
-        <button type="submit" class="btn">
+        <button
+          type="submit"
+          class="btn"
+          :disabled="v$.loginForm.$invalid"
+        >
           Login
         </button>
 
@@ -56,40 +84,85 @@
 
     <div class="popup_form registration">
       <h2>Registration</h2>
-      <form action="#">
+      <form @submit.prevent="registrationSubmitting">
         <div class="input_box">
           <span class="icon">
             <ion-icon name="person"></ion-icon>
           </span>
-          <input type="text" required>
+          <input
+            type="text"
+            v-model.trim="registrationForm.userName"
+            @blur="v$.registrationForm.userName.$touch()"
+            required
+          >
 <!--eslint-disable-next-line-->
-          <label>Username</label>
+          <label
+            :style="{ color: 'red' }"
+            v-if="v$.registrationForm.userName.$dirty && v$.registrationForm.userName.$invalid"
+          >
+            Username
+          </label>
+<!--eslint-disable-next-line-->
+          <label v-else>Username</label>
         </div>
 
         <div class="input_box">
           <span class="icon">
             <ion-icon name="mail"></ion-icon>
           </span>
-          <input type="email" required>
+          <input
+            type="email"
+            v-model.trim="registrationForm.email"
+            @blur="v$.registrationForm.email.$touch()"
+            required
+          >
 <!--eslint-disable-next-line-->
-          <label>Email</label>
+          <label
+            :style="{ color: 'red' }"
+            v-if="v$.registrationForm.email.$dirty && v$.registrationForm.email.$invalid"
+          >
+            Email
+          </label>
+<!--eslint-disable-next-line-->
+          <label v-else>Email</label>
         </div>
 
         <div class="input_box">
           <span class="icon">
             <ion-icon name="lock-closed"></ion-icon>
           </span>
-          <input type="password" required>
+          <input
+            type="password"
+            v-model.trim="registrationForm.password"
+            @blur="v$.registrationForm.password.$touch()"
+            required
+          >
 <!--eslint-disable-next-line-->
-          <label>Password</label>
+          <label
+            :style="{ color: 'red' }"
+            v-if="v$.registrationForm.password.$dirty && v$.registrationForm.password.$invalid"
+          >
+            Password
+          </label>
+<!--eslint-disable-next-line-->
+          <label v-else>Password</label>
         </div>
 
         <div class="remember_forgot">
 <!--eslint-disable-next-line-->
-          <label><input type="checkbox">I agree to the terms & conditions</label>
+          <label>
+            <input
+              type="checkbox"
+              v-model="registrationForm.agree"
+            >I agree to the terms & conditions
+          </label>
         </div>
 
-        <button type="submit" class="btn">
+        <button
+          type="submit"
+          class="btn"
+          :disabled="v$.registrationForm.$invalid"
+        >
           Registration
         </button>
 
@@ -110,20 +183,54 @@
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core';
+import { email, required, minLength } from '@vuelidate/validators';
+
 export default {
   name: 'UserLoginRegistration',
 
   props: {
     popupCondition: Boolean,
   },
+  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      loginForm: {
+        email: { required, email },
+        password: { required, minLength: minLength(6) },
+      },
+      registrationForm: {
+        userName: { required },
+        email: { required, email },
+        password: { required, minLength: minLength(6) },
+        agree: { checked: (value) => value },
+      },
+    };
+  },
   data() {
     return {
+      loginForm: {
+        email: '',
+        password: '',
+      },
+      registrationForm: {
+        user: '',
+        email: '',
+        password: '',
+        agree: false,
+      },
       isActiveLogin: false,
     };
   },
   methods: {
     changePopupCondition() {
       this.$emit('changePopupCondition');
+    },
+    loginSubmitting() {
+      console.log('login');
+    },
+    registrationSubmitting() {
+      console.log('reg');
     },
   },
 };
@@ -266,6 +373,9 @@ export default {
   color: #2b090e;
   font-weight: 700;
 }
+/*button:disabled {*/
+/*  color: red;*/
+/*}*/
 .login_register {
   font-size: .9em;
   color: white;
