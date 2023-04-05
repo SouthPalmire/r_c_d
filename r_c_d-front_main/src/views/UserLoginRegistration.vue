@@ -22,14 +22,12 @@
             @blur="v$.loginForm.email.$touch()"
             required
           >
-<!--eslint-disable-next-line-->
           <label
-            :style="{ color: 'red' }"
+            :style="{ color: '#800000' }"
             v-if="v$.loginForm.email.$dirty && v$.loginForm.email.$invalid"
           >
             enter your email
           </label>
-<!--eslint-disable-next-line-->
           <label v-else>Email</label>
         </div>
 
@@ -43,19 +41,16 @@
             @blur="v$.loginForm.password.$touch()"
             required
           >
-<!--eslint-disable-next-line-->
           <label
-            :style="{ color: 'red' }"
+            :style="{ color: '#800000' }"
             v-if="v$.loginForm.password.$dirty && v$.loginForm.password.$invalid"
           >
             enter your password
           </label>
-<!--eslint-disable-next-line-->
           <label v-else>Password</label>
         </div>
 
         <div class="remember_forgot">
-<!--eslint-disable-next-line-->
           <label><input type="checkbox">Remember me</label>
           <a href="#">Forgot password?</a>
         </div>
@@ -95,14 +90,12 @@
             @blur="v$.registrationForm.userName.$touch()"
             required
           >
-<!--eslint-disable-next-line-->
           <label
-            :style="{ color: 'red' }"
+            :style="{ color: '#800000' }"
             v-if="v$.registrationForm.userName.$dirty && v$.registrationForm.userName.$invalid"
           >
             Username
           </label>
-<!--eslint-disable-next-line-->
           <label v-else>Username</label>
         </div>
 
@@ -116,14 +109,12 @@
             @blur="v$.registrationForm.email.$touch()"
             required
           >
-<!--eslint-disable-next-line-->
           <label
-            :style="{ color: 'red' }"
+            :style="{ color: '#800000' }"
             v-if="v$.registrationForm.email.$dirty && v$.registrationForm.email.$invalid"
           >
             Email
           </label>
-<!--eslint-disable-next-line-->
           <label v-else>Email</label>
         </div>
 
@@ -137,19 +128,16 @@
             @blur="v$.registrationForm.password.$touch()"
             required
           >
-<!--eslint-disable-next-line-->
           <label
-            :style="{ color: 'red' }"
+            :style="{ color: '#800000' }"
             v-if="v$.registrationForm.password.$dirty && v$.registrationForm.password.$invalid"
           >
             Password
           </label>
-<!--eslint-disable-next-line-->
-          <label v-else>Password</label>
+          <label for='password' v-else>Password</label>
         </div>
 
         <div class="remember_forgot">
-<!--eslint-disable-next-line-->
           <label>
             <input
               type="checkbox"
@@ -183,16 +171,19 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/store/authStore';
 import { useVuelidate } from '@vuelidate/core';
 import { email, required, minLength } from '@vuelidate/validators';
 
 export default {
   name: 'UserLoginRegistration',
-
   props: {
     popupCondition: Boolean,
   },
-  setup: () => ({ v$: useVuelidate() }),
+  setup: () => ({
+    authStore: useAuthStore(),
+    v$: useVuelidate(),
+  }),
   validations() {
     return {
       loginForm: {
@@ -227,10 +218,10 @@ export default {
       this.$emit('changePopupCondition');
     },
     loginSubmitting() {
-      console.log('login');
+      console.log(this.authStore.isAuth);
     },
     registrationSubmitting() {
-      console.log('reg');
+      // console.log('reg');
     },
   },
 };
