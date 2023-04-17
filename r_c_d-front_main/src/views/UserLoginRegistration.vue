@@ -3,19 +3,14 @@
     class="popup_wrapper"
     :class="{ active: isActiveLogin, activePopup: popupCondition }"
   >
-    <span
-      class="popup_close"
-    >
-      <ion-icon @click="changePopupCondition" name="close"></ion-icon>
+    <span class="popup_close icon_close" @click="changePopupCondition">
     </span>
 
     <div class="popup_form login">
       <h2>Login</h2>
       <form @submit.prevent="loginSubmitting">
         <div class="input_box">
-          <span class="icon">
-            <ion-icon name="mail"></ion-icon>
-          </span>
+          <span class="icon_mail icon_img"></span>
           <input
             type="text"
             v-model.trim="loginForm.email"
@@ -32,9 +27,7 @@
         </div>
 
         <div class="input_box">
-          <span class="icon">
-            <ion-icon name="lock-closed"></ion-icon>
-          </span>
+          <span class="icon_password icon_img"></span>
           <input
             type="password"
             v-model.trim="loginForm.password"
@@ -81,9 +74,7 @@
       <h2>Registration</h2>
       <form @submit.prevent="registrationSubmitting">
         <div class="input_box">
-          <span class="icon">
-            <ion-icon name="person"></ion-icon>
-          </span>
+          <span class="icon_user icon_img"></span>
           <input
             type="text"
             v-model.trim="registrationForm.userName"
@@ -100,8 +91,7 @@
         </div>
 
         <div class="input_box">
-          <span class="icon">
-            <ion-icon name="mail"></ion-icon>
+          <span class="icon_mail icon_img">
           </span>
           <input
             type="email"
@@ -119,8 +109,7 @@
         </div>
 
         <div class="input_box">
-          <span class="icon">
-            <ion-icon name="lock-closed"></ion-icon>
+          <span class="icon_password icon_img">
           </span>
           <input
             type="password"
@@ -217,11 +206,31 @@ export default {
     changePopupCondition() {
       this.$emit('changePopupCondition');
     },
-    loginSubmitting() {
-      console.log(this.authStore.isAuth);
+    async loginSubmitting() {
+      const requestOptions = {
+        method: 'POST',
+        // credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.loginForm),
+      };
+      await fetch('http://127.0.0.1:6070/auth/login', requestOptions)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
     },
-    registrationSubmitting() {
-      // console.log('reg');
+    async registrationSubmitting() {
+      const requestOptions = {
+        method: 'POST',
+        // credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.registrationForm),
+      };
+      await fetch('http://127.0.0.1:6070/auth/registration', requestOptions)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
     },
   },
 };
@@ -283,7 +292,7 @@ export default {
   width: 45px;
   height: 45px;
   background: white;
-  font-size: 2em;
+  font-size: 1.5em;
   color: #2b090e;
   display: flex;
   justify-content: center;
@@ -325,12 +334,35 @@ export default {
   font-weight: 600;
   padding: 0 35px 0 5px;
 }
-.input_box .icon {
+.icon_img {
   position: absolute;
   right: 8px;
   font-size: 1.2em;
   color: white;
   line-height: 57px;
+  top: 10px;
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center center;
+  /*margin: 0 0.15em 0 0.3em;*/
+  /*vertical-align: -0.3em;*/
+  background-size: 1em 1em;
+  filter: invert(100%);
+  /*-webkit-filter: invert(100%);*/
+}
+.icon_mail {
+  background-image: url("./files/mail.svg");
+}
+.icon_password {
+  background-image: url("./files/lock-closed.svg");
+}
+.icon_user {
+  background-image: url("./files/person.svg");
+}
+.icon_close {
+  background-image: url("./files/close.svg");
 }
 .remember_forgot {
   font-size: .9em;
@@ -364,9 +396,6 @@ export default {
   color: #2b090e;
   font-weight: 700;
 }
-/*button:disabled {*/
-/*  color: red;*/
-/*}*/
 .login_register {
   font-size: .9em;
   color: white;

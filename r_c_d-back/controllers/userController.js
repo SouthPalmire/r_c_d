@@ -5,7 +5,7 @@ class UserController {
     try {
       const userData = await userService.registration(req.body);
       res.cookie('refreshToken', userData.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
-      res.json(userData);
+      res.status(201).json(userData);
     } catch (e) {
       res.status(401).json(e);
       console.log(e);
@@ -25,7 +25,8 @@ class UserController {
 
   async login(req, res) {
     try {
-      await res.json(await userService.login(req.body));
+      const userData = await userService.login(req.body);
+      res.status(200).json(userData);
     } catch (e) {
       res.status(401).json(e);
       console.log(e);

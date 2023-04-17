@@ -6,6 +6,6 @@ export default class UserDto {
   constructor(model, rows) {
     this.email = model.email;
     this.id = rows.insertId;
-    this.isActivated = model.activationStatus;
+    this.isActivated = 'false';
   }
 }

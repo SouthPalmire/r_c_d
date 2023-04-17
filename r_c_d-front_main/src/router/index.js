@@ -8,7 +8,7 @@ const routes = [
     name: 'UserLogin',
     path: '/login',
     component: UserLoginRegistration,
-    // alias: '/',
+    alias: '/',
   },
   // {
   //   name: 'UserRegister',

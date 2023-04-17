@@ -10,6 +10,7 @@ class UserService {
     return mysql(`SELECT * FROM users WHERE email='${user.email}';`)
       .then(async (data) => {
         if (data.length) {
+          // TODO alerts&errors
           return 'user already exist';
         }
 
@@ -41,12 +42,22 @@ class UserService {
       });
   }
 
-//   login(user) {
-//     const queryString = `SELECT *
-//                          FROM users
-//                          WHERE email = '${user.email}';`;
-//     return mysql(queryString);
-//   }
+  login(user) {
+    return mysql(`SELECT * FROM users WHERE email = '${user.email}';`)
+      .then(async (data) => {
+        console.log(data);
+        if (data.length) {
+          const checkedPassword = bcrypt.compareSync(user.password, data[0].password);
+          if (checkedPassword) {
+            return data[0].id;
+          }
+          // TODO alerts&errors
+          return 'ee';
+        }
+        // TODO alerts&errors
+        return 'e';
+      });
+  }
 //
 //   logout(user) {
 //     const queryString = `SELECT * FROM users WHERE email='${user.email}';`;
