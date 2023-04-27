@@ -4,14 +4,14 @@ import mysql from './db.js';
 import mailService from './mailService.js';
 import tokenService from './tokenService.js';
 import UserDto from '../dtos/userDto.js';
+import ApiError from '../exceptions/api-error.js';
 
 class UserService {
   registration(user) {
     return mysql(`SELECT * FROM users WHERE email='${user.email}';`)
       .then(async (data) => {
         if (data.length) {
-          // TODO alerts&errors
-          return 'user already exist';
+          throw ApiError.BadRequest('user already exist');
         }
 
         const activationLink = uuidv4();
@@ -36,7 +36,7 @@ class UserService {
     return mysql(`SELECT * FROM users WHERE activation_link='${activationLink}';`)
       .then((data) => {
         if (!data) {
-          return console.log('некорректная ссылка активации');
+          throw ApiError.BadRequest('bad activation link');
         }
         return mysql(`UPDATE users SET activation_status = 'true' WHERE activation_link = '${activationLink}'`);
       });
@@ -45,24 +45,46 @@ class UserService {
   login(user) {
     return mysql(`SELECT * FROM users WHERE email = '${user.email}';`)
       .then(async (data) => {
-        console.log(data);
-        if (data.length) {
-          const checkedPassword = bcrypt.compareSync(user.password, data[0].password);
-          if (checkedPassword) {
-            return data[0].id;
-          }
-          // TODO alerts&errors
-          return 'ee';
+        if (!data.length) {
+          throw ApiError.BadRequest('error in login or password');
         }
-        // TODO alerts&errors
-        return 'e';
+        const checkedPassword = bcrypt.compareSync(user.password, data[0].password);
+        if (!checkedPassword) {
+          throw ApiError.BadRequest('error in login or password');
+        }
+        const userDto = new UserDto(...data);
+        const tokens = tokenService.generateTokens({ ...userDto });
+        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+        return {
+          tokens,
+          user: userDto,
+        };
       });
   }
-//
-//   logout(user) {
-//     const queryString = `SELECT * FROM users WHERE email='${user.email}';`;
-//     return mysql(queryString);
-//   }
+
+  logout(refreshToken) {
+    const token = tokenService.removeToken(refreshToken);
+    return token;
+  }
+
+  refresh(refreshToken) {
+    if (!refreshToken) {
+      throw ApiError.UnAuthorizedError();
+    }
+    const userData = tokenService.validationRefreshToken(refreshToken);
+    const tokenFromDB = tokenService.findToken(refreshToken);
+    if (!userData || !tokenFromDB) {
+      throw ApiError.UnAuthorizedError();
+    }
+    const user = mysql(`SELECT * FROM users WHERE id = '${userData.id}';`);
+    const userDto = new UserDto(...user);
+    const tokens = tokenService.generateTokens({ ...userDto });
+    tokenService.saveToken(userDto.id, tokens.refreshToken);
+    return {
+      tokens,
+      user: userDto,
+    };
+  }
 }
 
 export default new UserService();

@@ -23,6 +23,37 @@ class TokenService {
         return mysql(insertQuery);
       });
   }
+
+  removeToken(refreshToken) {
+    mysql(`DELETE FROM tokens WHERE refresh_token = '${refreshToken}'`)
+      .then((data) => {
+        console.log(data);
+        return data;
+      });
+  }
+
+  validationAccessToken(token) {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_ACCESS);
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  validationRefreshToken(token) {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_REFRESH);
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  findToken(refreshToken) {
+    const tokenData = mysql(`SELECT * FROM tokens WHERE refresh_token='${refreshToken}';`);
+    return tokenData;
+  }
 }
 
 export default new TokenService();
